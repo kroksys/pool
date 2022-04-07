@@ -73,6 +73,8 @@ func (p *Pool[T]) Map(id uint64, fn func(T) T) T {
 }
 
 func (p *Pool[T]) Find(obj T) (uint64, *T) {
+	p.lock.RLock()
+	defer p.lock.RUnlock()
 	for k, v := range p.storage {
 		if v == obj {
 			return k, &v
