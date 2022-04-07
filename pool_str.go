@@ -5,14 +5,14 @@ import (
 )
 
 // Creates new pool with any type provided
-func NewPoolStr[T any]() *PoolStr[T] {
+func NewPoolStr[T comparable]() *PoolStr[T] {
 	return &PoolStr[T]{
 		lock:    &sync.RWMutex{},
 		storage: make(map[string]T),
 	}
 }
 
-type PoolStr[T any] struct {
+type PoolStr[T comparable] struct {
 
 	// holds the data
 	storage map[string]T
