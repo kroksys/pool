@@ -5,14 +5,14 @@ import (
 )
 
 // Creates new pool with any type provided
-func NewPool[T any]() *pool[T] {
-	return &pool[T]{
+func NewPool[T any]() *Pool[T] {
+	return &Pool[T]{
 		lock:    &sync.RWMutex{},
 		storage: make(map[uint64]T),
 	}
 }
 
-type pool[T any] struct {
+type Pool[T any] struct {
 
 	// index of stored element is incremented on each Put request
 	// Limitations:
@@ -29,7 +29,7 @@ type pool[T any] struct {
 
 // Adds object to pool and returns index ID that can be used
 // later to retreive the object
-func (p *pool[T]) Put(object T) uint64 {
+func (p *Pool[T]) Put(object T) uint64 {
 	p.lock.Lock()
 	defer p.lock.Unlock()
 	p.storage[p.index] = object
@@ -38,7 +38,7 @@ func (p *pool[T]) Put(object T) uint64 {
 
 // Gets object from storage. If value does not exists it will
 // return empty struct/object/interface
-func (p *pool[T]) Get(id uint64) T {
+func (p *Pool[T]) Get(id uint64) T {
 	p.lock.RLock()
 	defer p.lock.RUnlock()
 	return p.storage[id]
@@ -46,7 +46,7 @@ func (p *pool[T]) Get(id uint64) T {
 
 // The same as Get with difference that it return boolean
 // weather the value exists in storage.
-func (p *pool[T]) GetOk(id uint64) (T, bool) {
+func (p *Pool[T]) GetOk(id uint64) (T, bool) {
 	p.lock.RLock()
 	defer p.lock.RUnlock()
 	_, ok := p.storage[id]
@@ -54,18 +54,18 @@ func (p *pool[T]) GetOk(id uint64) (T, bool) {
 }
 
 // Deletes element from storage. If value does not exist it does nothin
-func (p *pool[T]) Delete(id uint64) {
+func (p *Pool[T]) Delete(id uint64) {
 	p.lock.Lock()
 	defer p.lock.Unlock()
 	delete(p.storage, id)
 }
 
 // Executes a function on stored element
-func (p *pool[T]) Exec(id uint64, fn func(T)) {
+func (p *Pool[T]) Exec(id uint64, fn func(T)) {
 	fn(p.Get(id))
 }
 
 // Executes a function on stored element and returns modified element
-func (p *pool[T]) Map(id uint64, fn func(T) T) T {
+func (p *Pool[T]) Map(id uint64, fn func(T) T) T {
 	return fn(p.Get(id))
 }
