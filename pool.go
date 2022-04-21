@@ -84,12 +84,12 @@ func (p *Pool[T]) Find(obj T) (uint64, *T) {
 }
 
 // Read lock for manual work with data
-func (p *Pool[T]) RLock() {
-	p.lock.RLock()
+func (p *Pool[T]) Lock() {
+	p.lock.Lock()
 }
 
 // Read unlock for manual work with data
-func (p *Pool[T]) RUnlock() {
+func (p *Pool[T]) Unlock() {
 	p.lock.Unlock()
 }
 

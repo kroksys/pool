@@ -64,12 +64,12 @@ func (p *PoolStr[T]) Map(id string, fn func(T) T) T {
 }
 
 // Read lock for manual work with data
-func (p *PoolStr[T]) RLock() {
-	p.lock.RLock()
+func (p *PoolStr[T]) Lock() {
+	p.lock.Lock()
 }
 
 // Read unlock for manual work with data
-func (p *PoolStr[T]) RUnlock() {
+func (p *PoolStr[T]) Unlock() {
 	p.lock.Unlock()
 }
 
