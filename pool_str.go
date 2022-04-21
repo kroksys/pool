@@ -63,10 +63,17 @@ func (p *PoolStr[T]) Map(id string, fn func(T) T) T {
 	return fn(p.Get(id))
 }
 
+// Read lock for manual work with data
 func (p *PoolStr[T]) RLock() {
 	p.lock.RLock()
 }
 
+// Read unlock for manual work with data
 func (p *PoolStr[T]) RUnlock() {
 	p.lock.Unlock()
+}
+
+// Returns storage for manual work with data.
+func (p *PoolStr[T]) Data() map[string]T {
+	return p.storage
 }

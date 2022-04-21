@@ -83,10 +83,17 @@ func (p *Pool[T]) Find(obj T) (uint64, *T) {
 	return 0, nil
 }
 
+// Read lock for manual work with data
 func (p *Pool[T]) RLock() {
 	p.lock.RLock()
 }
 
+// Read unlock for manual work with data
 func (p *Pool[T]) RUnlock() {
 	p.lock.Unlock()
+}
+
+// Returns storage for manual work with data.
+func (p *Pool[T]) Data() map[uint64]T {
+	return p.storage
 }
