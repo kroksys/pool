@@ -82,3 +82,11 @@ func (p *Pool[T]) Find(obj T) (uint64, *T) {
 	}
 	return 0, nil
 }
+
+func (p *Pool[T]) RLock() {
+	p.lock.RLock()
+}
+
+func (p *Pool[T]) RUnlock() {
+	p.lock.Unlock()
+}

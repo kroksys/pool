@@ -62,3 +62,11 @@ func (p *PoolStr[T]) Exec(id string, fn func(T)) {
 func (p *PoolStr[T]) Map(id string, fn func(T) T) T {
 	return fn(p.Get(id))
 }
+
+func (p *PoolStr[T]) RLock() {
+	p.lock.RLock()
+}
+
+func (p *PoolStr[T]) RUnlock() {
+	p.lock.Unlock()
+}
