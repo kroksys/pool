@@ -34,8 +34,10 @@ type Pool[T comparable] struct {
 func (p *Pool[T]) Put(object T) uint64 {
 	p.lock.Lock()
 	defer p.lock.Unlock()
-	p.storage[p.index] = object
-	return p.index
+	i := p.index
+	p.index++
+	p.storage[i] = object
+	return i
 }
 
 // Gets object from storage. If value does not exists it will
@@ -81,6 +83,15 @@ func (p *Pool[T]) Find(obj T) (uint64, *T) {
 		}
 	}
 	return 0, nil
+}
+
+// Executes a function for each element in pool
+func (p *Pool[T]) Each(fn func(T) T) {
+	p.lock.RLock()
+	defer p.lock.RUnlock()
+	for _, v := range p.storage {
+		fn(v)
+	}
 }
 
 // Read lock for manual work with data

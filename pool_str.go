@@ -63,6 +63,15 @@ func (p *PoolStr[T]) Map(id string, fn func(T) T) T {
 	return fn(p.Get(id))
 }
 
+// Executes a function for each element in pool
+func (p *PoolStr[T]) Each(fn func(T) T) {
+	p.lock.RLock()
+	defer p.lock.RUnlock()
+	for _, v := range p.storage {
+		fn(v)
+	}
+}
+
 // Read lock for manual work with data
 func (p *PoolStr[T]) Lock() {
 	p.lock.Lock()
