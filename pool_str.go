@@ -64,7 +64,7 @@ func (p *PoolStr[T]) Map(id string, fn func(T) T) T {
 }
 
 // Executes a function for each element in pool
-func (p *PoolStr[T]) Each(fn func(T) T) {
+func (p *PoolStr[T]) Each(fn func(T)) {
 	p.lock.RLock()
 	defer p.lock.RUnlock()
 	for _, v := range p.storage {

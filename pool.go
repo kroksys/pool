@@ -86,7 +86,7 @@ func (p *Pool[T]) Find(obj T) (uint64, *T) {
 }
 
 // Executes a function for each element in pool
-func (p *Pool[T]) Each(fn func(T) T) {
+func (p *Pool[T]) Each(fn func(T)) {
 	p.lock.RLock()
 	defer p.lock.RUnlock()
 	for _, v := range p.storage {
